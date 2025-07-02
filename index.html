@@ -60,6 +60,27 @@
             transform: translate(-50%, -50%);
         }
 
+        .leaf .tooltip {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 999;
+        }
+
+        .leaf:hover .tooltip {
+            opacity: 1;
+        }
+
         @keyframes float-diagonal-right {
             0% {
                 transform: translate(-50%, -50%) translate(0, 0);
@@ -79,8 +100,6 @@
                 transform: translate(-50%, -50%) translate(-10px, -15px);
             }
         }
-
-
 
         .bounding-box {
             position: absolute;
@@ -158,7 +177,6 @@
                 const wrapper = document.querySelector(`.box-wrapper[data-box-id="${key}"]`);
                 if (!wrapper) return;
 
-                // Generate random position within the wrapper (percent-based)
                 const left = Math.random() * 100;
                 const top = Math.random() * 100;
 
@@ -166,10 +184,9 @@
                 leaf.className = "leaf";
                 leaf.style.left = `${left}%`;
                 leaf.style.top = `${top}%`;
-                leaf.textContent = "🌸";
-                leaf.title = entry.name;
+                leaf.innerHTML = `🌸<div class="tooltip">${entry.name}</div>`;
 
-                const direction = Math.random() > 2 ? "right" : "left";
+                const direction = Math.random() > 0.5 ? "right" : "left";
                 leaf.style.animationName = `float-diagonal-${direction}`;
                 leaf.style.animationDuration = "2s";
                 leaf.style.animationTimingFunction = "ease-in-out";
@@ -180,6 +197,7 @@
                 wrapper.appendChild(leaf);
             });
         }
+
 
         createBoxContainers();
 
