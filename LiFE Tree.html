@@ -80,10 +80,10 @@
             }
         }
 
+
+
         .bounding-box {
             position: absolute;
-            // Hide border: 2px solid rgba(255, 0, 0, 0.7);
-            // Hide background-color: rgba(255, 0, 0, 0.2);
             pointer-events: none;
             box-sizing: border-box;
             z-index: 10;
@@ -135,6 +135,8 @@
                 wrapper.setAttribute('data-box-id', key);
 
                 // OPTIONAL: debug bounding box 
+                // Hide border: 2px solid rgba(255, 0, 0, 0.7);
+                // Hide background-color: rgba(255, 0, 0, 0.2);
                 const debug = true;
                 if (debug) {
                     const debugBox = document.createElement('div');
