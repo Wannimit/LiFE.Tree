@@ -58,13 +58,15 @@
             user-select: none;
             pointer-events: auto;
             transform: translate(-50%, -50%);
+            z-index: 100;
+            /* ⭐ เพิ่ม z-index ใบไม้เลเยอร์ล่างกว่า tooltip */
         }
 
         .leaf .tooltip {
             position: absolute;
             bottom: 120%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -50%);
             background-color: rgba(0, 0, 0, 0.8);
             color: #fff;
             padding: 4px 8px;
@@ -73,12 +75,13 @@
             white-space: nowrap;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 999;
+            transition: opacity 0.2s ease;
+            z-index: 99999;
         }
 
-        .leaf:hover .tooltip {
+        .leaf.active .tooltip {
             opacity: 1;
+            pointer-events: auto;
         }
 
         @keyframes float-diagonal-right {
@@ -185,6 +188,26 @@
                 leaf.style.left = `${left}%`;
                 leaf.style.top = `${top}%`;
                 leaf.innerHTML = `🌸<div class="tooltip">${entry.name}</div>`;
+
+                const tooltip = leaf.querySelector('.tooltip');
+                // ใช้ค่ามุมหมุนของ box-wrapper
+                const rotationDeg = box.rotation || 0;
+                tooltip.style.transform = `translate(-50%, -50%) rotate(${-rotationDeg}deg)`;
+
+
+                leaf.addEventListener("click", (e) => {
+                    e.stopPropagation();
+
+                    // ปิด tooltip ใบอื่นก่อน
+                    document.querySelectorAll('.leaf').forEach(el => el.classList.remove('active'));
+
+                    // toggle class active
+                    leaf.classList.toggle("active");
+                });
+
+                document.addEventListener("click", () => {
+                    document.querySelectorAll('.leaf').forEach(el => el.classList.remove('active'));
+                });
 
                 const direction = Math.random() > 0.5 ? "right" : "left";
                 leaf.style.animationName = `float-diagonal-${direction}`;
